@@ -41,24 +41,9 @@ namespace RevokeMsgPatcher
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             bag = serializer.Deserialize<Bag>(Properties.Resources.PatchJson);
 
-            // 初始化每个应用对应的修改者
-            wechatModifier = new WechatModifier(bag.Apps["Wechat"]);
-            weixinModifier = new WeixinModifier(bag.Apps["Weixin"]);
-            qqModifier = new QQModifier(bag.Apps["QQ"]);
-            timModifier = new TIMModifier(bag.Apps["TIM"]);
-            qqLiteModifier = new QQLiteModifier(bag.Apps["QQLite"]);
-            qqntModifier = new QQNTModifier(bag.Apps["QQNT"]);
-
-            rbtWechat.Tag = wechatModifier;
-            rbtWeixin.Tag = weixinModifier;
-            rbtQQ.Tag = qqModifier;
-            rbtTIM.Tag = timModifier;
-            rbtQQLite.Tag = qqLiteModifier;
-            rbtQQNT.Tag = qqntModifier;
-
             // 默认微信
             rbtWechat.Enabled = true;
-            modifier = wechatModifier;
+            modifier = ModifierFactory.CreateModifier(bag.Apps["Wechat"]);
         }
 
         public FormMain()
@@ -412,31 +397,8 @@ namespace RevokeMsgPatcher
             EnableAllButton(false);
 
             // 切换使用不同的防撤回对象
-            if (rbtWechat.Checked)
-            {
-                modifier = (WechatModifier)rbtWechat.Tag;
-            }
-            else if (rbtWeixin.Checked)
-            {
-                modifier = (WeixinModifier)rbtWeixin.Tag;
-            }
-            else if (rbtQQ.Checked)
-            {
-                modifier = (QQModifier)rbtQQ.Tag;
-            }
-            else if (rbtTIM.Checked)
-            {
-                modifier = (TIMModifier)rbtTIM.Tag;
-            }
-            else if (rbtQQLite.Checked)
-            {
-                modifier = (QQLiteModifier)rbtQQLite.Tag;
-            }
-            else if (rbtQQNT.Checked)
-            {
-                modifier = (QQNTModifier)rbtQQNT.Tag;
-                // ShowOrFocusFormLiteLoaderQQNT();
-            }
+            string appName = radioButton.Text;
+            modifier = ModifierFactory.CreateModifier(bag.Apps[appName]);
 
             EnableAllButton(true);
             // 触发了 txtPath_TextChanged 方法 已经调用了 InitEditorsAndUI(txtPath.Text);
