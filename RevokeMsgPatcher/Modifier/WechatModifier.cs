@@ -32,21 +32,19 @@ namespace RevokeMsgPatcher.Modifier
             {
                 string installPath = PathUtil.FindInstallPathFromRegistry("Wechat");
                 string realPath = GetRealInstallPath(installPath);
-                if (string.IsNullOrEmpty(realPath))
-                {
-                    List<string> defaultPathList = PathUtil.GetDefaultInstallPaths(@"Tencent\Wechat");
-                    foreach (string defaultPath in defaultPathList)
-                    {
-                        realPath = GetRealInstallPath(defaultPath);
-                        if (!string.IsNullOrEmpty(realPath))
-                        {
-                            return defaultPath;
-                        }
-                    }
-                }
-                else
+                if (!string.IsNullOrEmpty(realPath))
                 {
                     return realPath;
+                }
+
+                List<string> defaultPathList = PathUtil.GetDefaultInstallPaths(@"Tencent\Wechat");
+                foreach (string defaultPath in defaultPathList)
+                {
+                    realPath = GetRealInstallPath(defaultPath);
+                    if (!string.IsNullOrEmpty(realPath))
+                    {
+                        return defaultPath;
+                    }
                 }
             }
             catch (Exception e)
@@ -103,19 +101,6 @@ namespace RevokeMsgPatcher.Modifier
             return "";
         }
 
-        //public override bool ValidateAndInitialize(string installPath)
-        //{
-        //    // 判断是否是安装路径
-        //    if (!IsAllBinaryFilesExist(installPath))
-        //    {
-        //        return false;
-        //    }
-
-        //    // 初始化十六进制文件编辑器
-        //    // 并寻找与之配对的版本修改信息
-        //    InitEditors(installPath);
-
-        //    return true;
-        //}
+        
     }
 }
