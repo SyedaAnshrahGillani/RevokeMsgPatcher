@@ -85,19 +85,10 @@ namespace RevokeMsgPatcher.Modifier
         /// </summary>
         public void Backup()
         {
-            // 不覆盖同版本的备份文件
-            if (File.Exists(FileBakPath))
-            {
-                if (FileVersion != BackupFileVersion)
-                {
-                    File.Copy(FilePath, FileBakPath, true);
-                }
-            }
-            else
+            if (!File.Exists(FileBakPath) || FileVersion != BackupFileVersion)
             {
                 File.Copy(FilePath, FileBakPath, true);
             }
-
         }
 
         /// <summary>
